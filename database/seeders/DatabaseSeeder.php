@@ -31,14 +31,14 @@ class DatabaseSeeder extends Seeder
         $staff = User::create([
             'name' => 'Super Admin',
             'email' => 'admin@admin.com',
-            'phone' => '123123123',
+            'phone' => '1234567890',
             'password' => Hash::make('secret')
         ]);
 
         $user = User::create([
             'name' => 'User',
             'email' => 'user@user.com',
-            'phone' => '1234567890',
+            'phone' => '1111111111',
             'password' => Hash::make('secret')
         ]);
 
