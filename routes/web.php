@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{StaffController, StudentController, TrackController};
+use App\Http\Controllers\{HistoryController, HomeController, PaymentController, StaffController, StudentController, TrackController};
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,10 +21,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/login/email', [LoginController::class, 'loginView'])->name('login.view');
 Route::get('/login/phone-number', [LoginController::class, 'loginPage'])->name('login.page');
 Route::post('/login/phone-number/post', [LoginController::class, 'loginPhone'])->name('login.phone');
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
+Route::post('/profile/post', [HomeController::class, 'profilePost'])->name('profile.post');
 
 // Staff
 Route::prefix('staff')->group(function () {
@@ -32,6 +35,12 @@ Route::prefix('staff')->group(function () {
 
     Route::prefix('{user}')->group(function () {
         Route::get('view', [StaffController::class, 'show'])->name('staff.show');
+
+        Route::prefix('parcel')->group(function () {
+            Route::get('create', [StaffController::class, 'parcelCreate'])->name('staff.parcel.create');
+            Route::post('store', [StaffController::class, 'parcelStore'])->name('staff.parcel.store');
+            Route::get('destroy/{parcel}', [StaffController::class, 'parcelDestroy'])->name('staff.parcel.destroy');
+        });
     });
 });
 
@@ -53,4 +62,23 @@ Route::prefix('student')->group(function () {
 // Track & Trace
 Route::prefix('track-trace')->group(function () {
     Route::get('index', [TrackController::class, 'index'])->name('track.index');
+});
+
+// Payment
+Route::prefix('payment')->group(function () {
+    Route::get('index', [PaymentController::class, 'index'])->name('payment.index');
+
+    Route::prefix('{parcel}')->group(function () {
+        Route::get('edit', [PaymentController::class, 'edit'])->name('payment.edit');
+        Route::post('update', [PaymentController::class, 'update'])->name('payment.update');
+    });
+});
+
+// Histories
+Route::prefix('history')->group(function () {
+    Route::get('index', [HistoryController::class, 'index'])->name('history.index');
+
+    Route::prefix('{parcel}')->group(function () {
+        Route::get('show', [HistoryController::class, 'show'])->name('history.show');
+    });
 });

@@ -1,12 +1,16 @@
 @extends('layouts.app')
 
+@push('style')
+    <style>
+        .content  {
+            background-image: url("img/dashboard.jpeg");
+        }
+    </style>
+@endpush
+
 @section('content')
     <main class="content">
         <div class="container-fluid p-0">
-
-            <div class="mb-3">
-                <h1 class="h3 d-inline align-middle">Dashboard</h1>
-            </div>
 
             {{-- <div class="row">
                 <div class="col-12">

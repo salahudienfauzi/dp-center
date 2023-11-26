@@ -63,42 +63,46 @@
                         </a>
 					</li>
 
-					@hasanyrole('staff')
-						<li class="sidebar-item @if(Route::currentRouteName() == 'student.index') active @endif">
-							<a class="sidebar-link" href="{{ route('student.index') }}">
-								<i class="align-middle" data-feather="user"></i> <span class="align-middle">Student</span>
-							</a>
-						</li>
+					@if (auth()->user()->id == 1)
+						@hasanyrole('staff')
+							<li class="sidebar-item @if(Route::currentRouteName() == 'student.index') active @endif">
+								<a class="sidebar-link" href="{{ route('student.index') }}">
+									<i class="align-middle" data-feather="user"></i> <span class="align-middle">Student</span>
+								</a>
+							</li>
 
-						<li class="sidebar-item @if(Route::currentRouteName() == 'staff.index') active @endif">
-							<a class="sidebar-link" href="{{ route('staff.index') }}">
-								<i class="align-middle" data-feather="user"></i> <span class="align-middle">Staff</span>
-							</a>
-						</li>
-						<li class="sidebar-item">
-							<a class="sidebar-link" href="#">
-								<i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Payment</span>
-							</a>
-						</li>
-					@endhasanyrole
+							<li class="sidebar-item @if(Route::currentRouteName() == 'staff.index') active @endif">
+								<a class="sidebar-link" href="{{ route('staff.index') }}">
+									<i class="align-middle" data-feather="user"></i> <span class="align-middle">Staff</span>
+								</a>
+							</li>
+							<li class="sidebar-item">
+								<a class="sidebar-link" href="#">
+									<i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Payment</span>
+								</a>
+							</li>
+						@endhasanyrole
+					@endif
 
-					@hasanyrole('student')
-						<li class="sidebar-item @if(Route::currentRouteName() == 'staff.index') active @endif">
-							<a class="sidebar-link" href="{{ route('track.index') }}">
-								<i class="align-middle" data-feather="user"></i> <span class="align-middle">Track & Trace</span>
-							</a>
-						</li>
-						<li class="sidebar-item">
-							<a class="sidebar-link" href="#">
-								<i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Payment</span>
-							</a>
-						</li>
-						<li class="sidebar-item">
-							<a class="sidebar-link" href="#">
-								<i class="align-middle" data-feather="check-square"></i> <span class="align-middle">History</span>
-							</a>
-						</li>
-					@endhasanyrole
+					@if (auth()->user()->id != 1)
+						@hasanyrole('student|staff')
+							<li class="sidebar-item @if(Route::currentRouteName() == 'track.index') active @endif">
+								<a class="sidebar-link" href="{{ route('track.index') }}">
+									<i class="align-middle" data-feather="user"></i> <span class="align-middle">Track & Trace</span>
+								</a>
+							</li>
+							<li class="sidebar-item @if(Route::currentRouteName() == 'payment.index') active @endif">
+								<a class="sidebar-link" href="{{ route('payment.index') }}">
+									<i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Payment</span>
+								</a>
+							</li>
+							<li class="sidebar-item @if(Route::currentRouteName() == 'history.index') active @endif">
+								<a class="sidebar-link" href="{{ route('history.index') }}">
+									<i class="align-middle" data-feather="check-square"></i> <span class="align-middle">History</span>
+								</a>
+							</li>
+						@endhasanyrole
+					@endif
 				</ul>
 			</div>
 		</nav>
@@ -117,12 +121,8 @@
                                 <span class="text-dark">{{ auth()->user()->name }}</span>
                             </a>
 							<div id="dropdown-menu" class="dropdown-menu dropdown-menu-end">
-								{{-- <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
+								<a class="dropdown-item" href="{{ route('profile') }}"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
-								<div class="dropdown-divider"></div> --}}
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">

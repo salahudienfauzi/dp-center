@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="AdminKit">
-	<link rel="shortcut icon" href="{{ asset('template/img/icons/icon-48x48.png') }}" />
+	<link rel="shortcut icon" href="{{ asset('img/parcel.png') }}" />
 
 	<title>Sign Up | DP Center</title>
 

@@ -76,13 +76,13 @@ class StudentController extends Controller
             'date' => $request->date,
         ]);
 
-        return redirect()->route('student.show', $user);
+        return redirect()->route('student.show', $user)->with('success', 'You have successfully add parcel.');
     }
 
     public function parcelDestroy(User $user, Parcel $parcel)
     {
         $parcel->delete();
 
-        return redirect()->route('student.show', $user);
+        return redirect()->route('student.show', $user)->with('danger', 'You have successfully delete parcel.');
     }
 }

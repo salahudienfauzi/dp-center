@@ -55,6 +55,16 @@
                         <div class="card-body">
                             <h3 class="card-title mb-4">List of Parcel</h3>
                             <div>
+                                @if ($message = Session::get('success'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @endif
+                                @if ($message = Session::get('danger'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @endif
                                 <a href="{{ route('student.parcel.create', $user) }}" class="btn btn-xs btn-success mb-2">
                                     Add
                                 </a>
