@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Parcel, Payment};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
@@ -41,26 +42,61 @@ class PaymentController extends Controller
     {
         $request->validate([
             'payment_option' => 'required',
-            'pick_up_option' => 'required',
-            'receipt' => 'required_if:payment_option,transfer'
+            'pick_up_option' => 'required'
         ]);
-
-        $filepath = null;
-        if ($request->receipt) {
-            $extension = $request->receipt->extension();
-            $filename = now()->format('Ymd_Hisv') . '.' . $extension;
-            $filepath = 'receipt/' . $filename;
-
-            Storage::disk('public')->put($filepath, file_get_contents($request->receipt));
-        }
 
         Payment::create([
             'parcel_id' => $parcel->id,
-            'type' => $request->payment_option == 'cash' ? 1 : 2,
+            'type' => $request->payment_option,
             'pick_up' => $request->pick_up_option,
-            'file_path' => $filepath
+            'price' => $request->price
         ]);
 
-        return redirect()->route('payment.index')->with('success', 'You have successfully pay for your parcel.');
+        if ($request->payment_option == '2') {
+            $someData = [
+                'userSecretKey' => 'eo71frxq-cc59-wadq-gx5j-6ukytqwtrg3a',
+                'categoryCode' => 'srf69fys',
+                'billName' => auth()->user()->name,
+                'billDescription' => 'Parcel services using online payment',
+                'billPriceSetting' => 1,
+                'billPayorInfo' => 0,
+                'billAmount' => $request->price * 100,
+                'billReturnUrl' => route('payment.receipt', $parcel),
+                'billCallbackUrl' => '#',
+                'billExternalReferenceNo' => $parcel->id,
+                'billTo' => auth()->user()->name,
+                'billEmail' => auth()->user()->email,
+                'billPhone' => auth()->user()->phone,
+                'billPaymentChannel' => '2',
+            ];
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_URL, 'https://dev.toyyibpay.com/index.php/api/createBill');
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $someData);
+
+            $result = curl_exec($curl);
+            $info = curl_getinfo($curl);
+            curl_close($curl);
+
+            $obj = json_decode($result);
+
+            if (isset($obj[0]->BillCode)) {
+                $billCode = $obj[0]->BillCode;
+                $redirectUrl = "https://dev.toyyibpay.com/$billCode";
+
+                return Redirect::away($redirectUrl);
+            } else {
+                return redirect()->route('payment.index')->with('fail', 'Invalid response from ToyyibPay');
+            }
+        }
+
+        return redirect()->route('payment.receipt', $parcel);
+    }
+
+    public function receipt(Request $request, Parcel $parcel)
+    {
+        return view('payment.receipt', compact('parcel'));
     }
 }

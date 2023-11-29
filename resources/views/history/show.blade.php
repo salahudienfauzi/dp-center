@@ -42,12 +42,10 @@
                                             <label class="input-title">Pick Up Option</label>
                                             <h6 class="input-show">{{ $parcel->payment->pick_up == 1 ? 'Self pick up' : 'Delivery' }}</h6>
                                         </div>
-                                        @if ($parcel->payment->file_path)
-                                            <div class="form-group mb-3">
-                                                <label class="input-title">Receipt</label><br>
-                                                <a href="{{ asset('storage/' . $parcel->payment->file_path) }}" target="_blank">Click here</a>
-                                            </div>
-                                        @endif
+                                        <div class="form-group mb-3">
+                                            <label class="input-title">Total Payment</label>
+                                            <h6 class="input-show">RM{{ $parcel->payment->price }}</h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

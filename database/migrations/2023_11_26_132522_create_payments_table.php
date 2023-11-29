@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parcel_id');
             $table->integer('type')->comment('1=Cash,2=Transfer');
             $table->integer('pick_up')->comment('1=Self-pick up,2=Delivery');
-            $table->text('file_path')->nullable();
+            $table->integer('price');
             $table->timestamps();
         });
     }

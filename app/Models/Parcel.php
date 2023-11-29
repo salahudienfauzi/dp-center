@@ -14,6 +14,7 @@ class Parcel extends Model
         'admin_id',
         'parcel_no',
         'courier',
+        'price',
         'date'
     ];
 

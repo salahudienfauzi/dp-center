@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{Parcel, User};
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller
 {
@@ -68,13 +69,27 @@ class StudentController extends Controller
             'date' => 'required'
         ]);
 
-        Parcel::create([
+        $parcel = Parcel::create([
             'user_id' => $user->id,
             'admin_id' => auth()->user()->id,
             'parcel_no' => $request->parcel_no,
             'courier' => $request->courier_name,
             'date' => $request->date,
         ]);
+
+        $to_name = $user->name;
+        $to_email = $user->email;
+
+        $data = array(
+            'name' => $to_name,
+            'parcel_no' => $parcel->parcel_no,
+            'courier_name' => $parcel->courier_name,
+            'date' => $parcel->date->format('d/m/Y')
+        );
+
+        Mail::send('mail.parcel-notification', $data, function ($message) use ($to_name, $to_email) {
+            $message->to($to_email, $to_name)->subject('Parcel Arrival Notification');
+        });
 
         return redirect()->route('student.show', $user)->with('success', 'You have successfully add parcel.');
     }

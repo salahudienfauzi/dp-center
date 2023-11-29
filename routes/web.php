@@ -71,6 +71,7 @@ Route::prefix('payment')->group(function () {
     Route::prefix('{parcel}')->group(function () {
         Route::get('edit', [PaymentController::class, 'edit'])->name('payment.edit');
         Route::post('update', [PaymentController::class, 'update'])->name('payment.update');
+        Route::get('receipt', [PaymentController::class, 'receipt'])->name('payment.receipt');
     });
 });
 

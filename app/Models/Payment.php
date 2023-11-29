@@ -13,7 +13,7 @@ class Payment extends Model
         'parcel_id',
         'type',
         'pick_up',
-        'file_path'
+        'price'
     ];
 
     public function parcel()

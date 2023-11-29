@@ -76,8 +76,8 @@
 									<i class="align-middle" data-feather="user"></i> <span class="align-middle">Staff</span>
 								</a>
 							</li>
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="#">
+							<li class="sidebar-item @if(Route::currentRouteName() == 'history.index') active @endif">
+								<a class="sidebar-link" href="{{ route('history.index') }}">
 									<i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Payment</span>
 								</a>
 							</li>

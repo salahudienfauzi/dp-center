@@ -15,8 +15,18 @@ class HistoryController extends Controller
      */
     public function index(Request $request)
     {
+        $filter = null;
+        if (auth()->user()->id != 1) {
+            $filter = auth()->user()->id;
+        }
+
         if ($request->ajax()) {
-            $students = Parcel::where('user_id', auth()->user()->id)->whereHas('payment')->get();
+            $students = Parcel::when($filter, function($query, $filter) {
+                    return $query->where('user_id', $filter);
+                })
+                ->whereHas('payment')
+                ->get();
+
             return datatables()->of($students)
                 ->addIndexColumn()
                 ->addColumn('date_my', function ($item) {

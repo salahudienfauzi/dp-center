@@ -38,10 +38,10 @@
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label class="input-title">Payment Option</label>
-                                                <select name="payment_option" class="form-control @error('payment_option') is-invalid @enderror">
+                                                <select name="payment_option" id="payment_option" class="form-control @error('payment_option') is-invalid @enderror" onchange="myFunction()">
                                                     <option value="">Select payment option</option>
-                                                    <option value="cash" {{ old('payment_option') == 'cash' ? 'selected' : '' }}>Cash</option>
-                                                    <option value="transfer" {{ old('payment_option') == 'transfer' ? 'selected' : '' }}>Transfer</option>
+                                                    <option value="1" {{ old('payment_option') == 1 ? 'selected' : '' }}>Cash</option>
+                                                    <option value="2" {{ old('payment_option') == 2 ? 'selected' : '' }}>Transfer</option>
                                                 </select>
                                                 @error('payment_option')
                                                     <span class="invalid-feedback" role="alert">
@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label class="input-title">Pick Up Option</label>
-                                                <select name="pick_up_option" class="form-control @error('pick_up_option') is-invalid @enderror">
+                                                <select name="pick_up_option" id="pick_up_option" class="form-control @error('pick_up_option') is-invalid @enderror" onchange="myFunction()">
                                                     <option value="">Select pick up option</option>
                                                     <option value="1" {{ old('pick_up_option') == 1 ? 'selected' : '' }}>Self pick up</option>
                                                     <option value="2" {{ old('pick_up_option') == 2 ? 'selected' : '' }}>Delivery</option>
@@ -63,13 +63,9 @@
                                                 @enderror
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label class="input-title">Upload Receipt</label>
-                                                <input type="file" name="receipt" class="form-control @error('receipt') is-invalid @enderror">
-                                                @error('receipt')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
+                                                <label class="input-title">Total Payment</label>
+                                                <h6 class="input-show" id="price-show"></h6>
+                                                <input type="hidden" name="price" id="price">
                                             </div>
                                         </div>
                                     </div>
@@ -85,3 +81,19 @@
         </form>
     </main>
 @endsection
+
+@push('script')
+    <script>
+    function myFunction() {
+        var price = 1;
+        var pick_up_option = document.getElementById("pick_up_option").value
+
+        if (pick_up_option == 2) {
+            price = price + 1
+        }
+
+        document.getElementById("price-show").innerHTML = 'RM' + price;
+        document.getElementById("price").value = price;
+    }
+    </script>
+@endpush
