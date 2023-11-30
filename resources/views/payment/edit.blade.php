@@ -17,6 +17,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                @if ($message = Session::get('danger'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @endif
                                 <div class="border rounded">
                                     <div class="row m-2">
                                         <div class="col-md-4">
@@ -70,8 +75,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-xs btn-success mt-3">
-                                    Submit
+                                <button type="submit" class="btn btn-xs btn-primary mt-3">
+                                    Proceed to Payment
                                 </button>
                             </div>
                         </div>
